@@ -1,4 +1,5 @@
 # 1. 라이브러리 임포트
+from flask import Flask, jsonify, request
 import os
 import librosa
 import numpy as np
@@ -7,8 +8,22 @@ import boto3
 from tensorflow.keras.models import load_model
 from keras.optimizers import Adam
 
-# 2. 모델 불러오기
-model = load_model("/opt/ml/model/all_batch32_dense(224,224).hdf5", custom_objects={"Adam": Adam})
+
+app = Flask(__name__)
+
+MODEL_PATH = '/opt/ml/model/all_batch32_dense(224,224).hdf5'
+model = load_model(MODEL_PATH, custom_objects={"Adam": Adam})
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    # 여기에 입력 데이터를 전처리 및 예측 로직을 구현하세요.
+    # ...
+    result = model.predict(input_data)
+
+    return jsonify({'output': result.tolist()})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
 
 class_names = ['1-1어른발걸음', '1-2아이발걸음', '1-3망치질', '2-1가구끄는', '2-2문여닫는','2-3.런닝머신','2-4골프퍼팅','3-1화장실',
                '3-2샤워','3-3드럼세탁기','3-4통돌이세탁기','3-5진공청소기','3-6식기세척기','4-1바이올린','4-2피아노','5-1개','5-2고양이']
