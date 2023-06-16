@@ -14,4 +14,4 @@ COPY all_batch32_dense(224,224).hdf5 /opt/ml/model/all_batch32_dense(224,224).hd
 COPY serve.py /app/serve.py
 
 # 람다 함수 호출 액션을 serve 명령어로 지정
-ENTRYPOINT ["python", "/app/serve.py"]
+CMD ["python", "-u", "/app/serve.py"]
